@@ -24,3 +24,19 @@ def mostrar_productos():
     cur.execute('''SELECT * FROM Producto''')
     productos = cur.fetchall()
     return productos
+
+def actualizar_titulo_producto(producto_id,titulo):
+    cur.execute('UPDATE Producto SET name = ? WHERE id = ?', (titulo, producto_id))
+    conn.commit()
+
+def actualizar_cantidad_producto(producto_id,cantidad):
+    cur.execute('UPDATE Producto SET quantity = ? WHERE id = ?', (cantidad, producto_id))
+    conn.commit()
+
+def actualizar_fecha_vencimiento_producto(producto_id,vencimiento):
+    cur.execute('UPDATE Producto SET due_date = ? WHERE id = ?', (vencimiento, producto_id))
+    conn.commit()
+
+def eliminar_producto(producto_id):
+    cur.execute('DELETE FROM Producto WHERE id = ?', (producto_id))
+    conn.commit()
