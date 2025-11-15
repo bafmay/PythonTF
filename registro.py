@@ -1,6 +1,6 @@
 import textwrap
 from os import system
-from base_datos import agregar_producto,mostrar_productos,eliminar_producto,actualizar_titulo_producto,actualizar_cantidad_producto,actualizar_fecha_vencimiento_producto
+from base_datos import agregar_producto,mostrar_productos,eliminar_producto,actualizar_titulo_producto,actualizar_cantidad_producto,actualizar_fecha_vencimiento_producto,avisar_productos_por_vencer
 
 
 def bienvenida():
@@ -12,18 +12,16 @@ def bienvenida():
     ================================================================================================== 
     '''
     print(textwrap.dedent(message).strip())
-    print("")
 
 def mostrar_menu():
     message = '''
         Elija una opcion:
         (1) Registre un alimento / producto
-        (2) Mostrar los productos a vencer
+        (2) Mostrar todos los productos 
         (3) Editar un registro
         (4) Eliminar un registro
         (5) Salir
         '''
-    print("")
     print(textwrap.dedent(message).strip())
 
 def registrar_alimento():
@@ -35,6 +33,7 @@ def registrar_alimento():
     limpiar_consola()
 
 def mostrar_productos_vencidos():
+
     elegir_producto()
     limpiar_consola()
 
@@ -51,7 +50,7 @@ def editar_registro():
         actualizar_cantidad_producto(producto_id,nuevo_cantidad)
     elif opcion_editar == 3: #fecha vencimiento
         nuevo_vencimiento = input("Ingrese la nueva fecha de vencimiento (DD/MM/AAAA): ")
-        actualizar_cantidad_producto(producto_id,nuevo_vencimiento)
+        actualizar_fecha_vencimiento_producto(producto_id,nuevo_vencimiento)
 
     if 1 <= opcion_editar <= 3:
         print("Los datos han sido actualizados")
@@ -71,6 +70,9 @@ def limpiar_consola():
 
 def elegir_producto():
     productos = mostrar_productos()
+    print("==================================================================================================")
+    print("Listado de productos")
+    print("==================================================================================================")
     for producto in productos:
         print(f"({producto[0]}) Nombre: {producto[1]}, Cantidad: {producto[2]} ,Fecha de vencimiento: {producto[3]}")
 
@@ -85,8 +87,11 @@ def menu_editar():
 
 while True:
 
+    bienvenida()
     try:
-        bienvenida()
+        print("==================================================================================================")
+        avisar_productos_por_vencer()
+        print("==================================================================================================")
         mostrar_menu()
         opcion = input("Ingrese una opcion : ")
         opcion = int(opcion)

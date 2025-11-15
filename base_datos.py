@@ -40,3 +40,26 @@ def actualizar_fecha_vencimiento_producto(producto_id,vencimiento):
 def eliminar_producto(producto_id):
     cur.execute('DELETE FROM Producto WHERE id = ?', (producto_id))
     conn.commit()
+
+def avisar_productos_por_vencer():
+    cur.execute("""
+        SELECT id, name, due_date
+        FROM Producto
+        WHERE
+            julianday(
+                substr(due_date, 7, 4) || '-' ||
+                substr(due_date, 4, 2) || '-' ||
+                substr(due_date, 1, 2)
+            )
+            - julianday('now') BETWEEN -7 AND 7
+    """)
+    # cur.execute("SELECT id, name, due_date FROM Producto LIMIT 5")
+
+    productos = cur.fetchall()
+
+    if not productos:
+        print("No hay productos por vencer en los próximos 7 días.")
+        return
+
+    for prod_id, name, due_date in productos:
+        print(f"⚠ El producto '{name}' (ID {prod_id}) se vence el {due_date}.")
